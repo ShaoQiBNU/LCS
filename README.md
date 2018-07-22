@@ -60,4 +60,66 @@ public class LongestSubstring {
 }
 
 ```
+# 三. 公共子串的元素可以不相邻
+
+> 例如，输入： "1A2C3D4B56",10,"B1D23CA45B6A",12，返回： 6
+
+> 采用动态规划算法，DP数组中的i和j分别表示在两串中，分别取到前i位和前j位时，两个前缀子串所递推得到的最长公共子序列。 将数组中的dp[i][0]和dp[0][i]分别初始化为0，表示无论i是多少，另一个串前缀取i位，与当前串的空串都不会有任何公共子序列。 然后开始递推，遍历i,j以对比两串中相等的字符，一旦遇到相等的字符，将从i-1,j-1的位置继承状态，并延续继承到的最长公共子序列的记录值，也就是+1操作，表示当两串的第i位字符和第j位字符相等时，将从不包括这两个字符的前缀子串里得到的最长公共子序列+1，得到当前位置的新的最长公共子序列。也就是求解当前i,j的状态，来自于i-1,j-1的状态+1获得。而当i，j位置的字符不等时，当前位不能延续最长公共子序列的值，只能从之前i-1,j 和i,j-1取最大值继承。这样递推，将得到整个串的最长公共子序列。状态转移方程： 
+![image](https://github.com/ShaoQiBNU/LCS/blob/master/images/3.png)
+
+> 代码如下：
+
+```JAVA
+import java.util.*;
+
+public class LCS {
+    public int findLCS(String A, int n, String B, int m) {
+
+        int[][] dp=new int[n+1][m+1];
+
+        // 边界赋值为0
+        for(int i=0;i<=n;i++){
+            dp[i][0]=0;
+        }
+
+        for(int i=0;i<=m;i++){
+            dp[0][i]=0;
+        }
+
+        // 每个字符进行比较
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+
+                // 字符相等，继承当前最长子串
+                if(A.charAt(i)==B.charAt(j)){
+                    dp[i+1][j+1]=dp[i][j]+1;
+                }
+
+                // 字符不同，继承最大的
+                else{
+                    dp[i+1][j+1]=dp[i+1][j] > dp[i][j+1] ? dp[i+1][j] : dp[i][j+1];
+                }
+            }
+        }
+        return dp[n][m];
+    }
+    public static void main(String[] args){
+        LCS Robot=new LCS();
+        n=10;
+        m=12;
+        String A="1A2C3D4B56";
+        String B="B1D23CA45B6A";
+        int res=Robot.countWays(A,n,B,m);
+        System.out.println(res);
+    }
+}
+```
+
+
+
+
+
+
+
+
 
