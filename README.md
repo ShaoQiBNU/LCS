@@ -117,11 +117,62 @@ public class LCS {
 }
 ```
 
+# 四. 应用
 
+> 对于一个字符串，如果不要求子串连续，那么一个字符串的最大回文子串的最大长度是多少？输出该字符串的最长回文子串的长度。（不要求输出最长回文串，并且子串不要求连续）  输入： adbca    输出：3  ada/aba/aca
 
+> 要找的是最长的回文子序列（不一定连续），可以先对输入的字符串进行反转操作，再利用动态规划和原来的字符串求最长公共子序列。
 
+```java
+import java.util.*;
+public class Main {
+    static String s;
+    public static void main(String[] args) {
 
+        Scanner in = new Scanner(System.in);
+        
+        s = in.next();
+        
+        int n = s.length();
+        
+        if(n==1){
+            
+            System.out.println(1);
+        }
+        
 
+        else{
 
+            int[][] dp=new int[n+1][n+1];
 
+            // 边界设置为1
+            for(int i=0; i<=n; i++){
+                
+                dp[i][0]=0;
+                dp[0][i]=0;
+            }
 
+            // 动态规划，寻找最长公共子串
+            for(int i=0;i<n;i++){
+                
+                for(int j=0;j<n;j++){
+                    
+                    if(s.charAt(i)==s.charAt(n-j-1)){
+                        
+                        dp[i+1][j+1] = dp[i][j] + 1;
+                    }
+                    
+                    else{
+                        
+                        dp[i+1][j+1] = dp[i+1][j] > dp[i][j+1] ? dp[i+1][j]: dp[i][j+1];
+                    }
+                
+                }
+            }
+        
+            System.out.println(dp[n][n]);
+        
+        }  
+    }
+}
+```
